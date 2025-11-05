@@ -6,7 +6,9 @@ import com.kareem.tone.model.Student;
 import com.kareem.tone.service.StudentService;
 import com.kareem.tone.util.StudentMapper;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +24,22 @@ public class StudentController {
     public StudentController(StudentService studentService , StudentMapper studentMapper) {
         this.studentService = studentService;
         this.studentMapper = studentMapper;
+    }
+
+
+
+    @GetMapping("/search")
+    public Page<StudentDTO> searchStudents(
+            @RequestParam(required = false) String name ,
+            // here with 0 get the first page
+            @RequestParam(defaultValue = "0") int page ,
+            // get 10 student if i don't pass value
+            @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<Student> students = studentService.searchStudents(name, pageable);
+        return students.map(studentMapper::toDTO);
+
     }
 
     @GetMapping
