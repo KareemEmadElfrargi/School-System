@@ -1,46 +1,59 @@
 package com.kareem.tone.service;
 
+import com.kareem.tone.dto.StudentRequestDto;
+import com.kareem.tone.dto.StudentResponseDto;
 import com.kareem.tone.model.Student;
 import com.kareem.tone.repository.StudentRepository;
+import com.kareem.tone.util.StudentMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper) {
         this.studentRepository = studentRepository;
+        this.studentMapper = studentMapper;
     }
 
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public List<StudentResponseDto> getAllStudents() {
+        return studentRepository.findAll()
+                .stream()
+                .map(studentMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Student addStudent(Student student) {
-        if (studentRepository.existsByEmail(student.getEmail())) {
-            throw new RuntimeException("Email already in use: " + student.getEmail());
+    public StudentResponseDto addStudent(StudentRequestDto requestDto) {
+        if (studentRepository.existsByEmail(requestDto.getEmail())) {
+            throw new RuntimeException("Email already in use: " + requestDto.getEmail());
         }
-        return studentRepository.save(student);
+        Student student = studentMapper.toEntity(requestDto);
+        Student saved = studentRepository.save(student);
+        return studentMapper.toDTO(saved);
     }
 
-    public Student updateStudent(Long id, Student updatedStudent) {
+    public StudentResponseDto updateStudent(Long id, StudentRequestDto requestDto) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student with id: " + id + " not found"));
 
         // check email when update
-        if (!student.getEmail().equals(updatedStudent.getEmail())
-                && studentRepository.existsByEmail(updatedStudent.getEmail())){
-            throw new RuntimeException("Email already in use: " + updatedStudent.getEmail());
+        if (!student.getEmail().equals(requestDto.getEmail())
+                && studentRepository.existsByEmail(requestDto.getEmail())){
+            throw new RuntimeException("Email already in use: " + requestDto.getEmail());
         }
 
-        student.setName(updatedStudent.getName());
-        student.setEmail(updatedStudent.getEmail());
-        student.setAge(updatedStudent.getAge());
-        return studentRepository.save(student);
+        student.setName(requestDto.getName());
+        student.setEmail(requestDto.getEmail());
+        student.setAge(requestDto.getAge());
+        Student updated = studentRepository.save(student);
+
+        return studentMapper.toDTO(updated);
     }
 
     public void deleteStudent(long id) {
@@ -50,16 +63,20 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public Student getStudentById(long id) {
-        return studentRepository.findById(id)
+    public StudentResponseDto getStudentById(long id) {
+        Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student with id: " + id + " not found"));
+      return studentMapper.toDTO(student);
     }
 
-    public Page<Student> searchStudents(String name , Pageable pageable){
+    public Page<StudentResponseDto> searchStudents(String name , Pageable pageable){
+        Page<Student> pageResult;
         if (name == null || name.trim().isEmpty()){
-            return studentRepository.findAll(pageable);
+            pageResult = studentRepository.findAll(pageable);
+        }else {
+            pageResult = studentRepository.findByNameContainingIgnoreCase(name,pageable);
         }
-        return studentRepository.findByNameContainingIgnoreCase(name,pageable);
+        return pageResult.map(studentMapper::toDTO);
     }
 
 }
