@@ -1,10 +1,6 @@
 package com.kareem.tone.controller;
-
-
-import com.kareem.tone.dto.StudentDTO;
 import com.kareem.tone.dto.StudentRequestDto;
 import com.kareem.tone.dto.StudentResponseDto;
-import com.kareem.tone.model.Student;
 import com.kareem.tone.service.StudentService;
 import com.kareem.tone.util.StudentMapper;
 import jakarta.validation.Valid;
@@ -12,9 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/students")
