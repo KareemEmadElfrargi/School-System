@@ -2,7 +2,9 @@ package com.kareem.tone.controller;
 
 import com.kareem.tone.dto.CourseRequestDto;
 import com.kareem.tone.dto.CourseResponseDto;
+import com.kareem.tone.dto.CourseWithStudentsDto;
 import com.kareem.tone.service.CourseService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,5 +37,10 @@ public class CourseController {
     @DeleteMapping("/id")
     public CourseResponseDto deleteCourse(@PathVariable Long id){
         return courseService.deleteCourse(id);
+    }
+
+    @GetMapping("{id}/students")
+    public ResponseEntity<CourseWithStudentsDto> getCourseWithStudent(@PathVariable Long id){
+        return ResponseEntity.ok(courseService.getCourseWithStudents(id));
     }
 }

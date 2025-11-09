@@ -3,6 +3,7 @@ package com.kareem.tone.service;
 
 import com.kareem.tone.dto.CourseRequestDto;
 import com.kareem.tone.dto.CourseResponseDto;
+import com.kareem.tone.dto.CourseWithStudentsDto;
 import com.kareem.tone.model.Course;
 import com.kareem.tone.repository.CourseRepository;
 import com.kareem.tone.util.CourseMapper;
@@ -58,6 +59,16 @@ public class CourseService {
                 () -> new EntityNotFoundException("Course with id: " + id + " not found")
         );
         return courseMapper.toDto(existing);
+    }
+    /**
+     * @param idCourse --> give me unique id of course
+     * @return CourseWithStudentsDto to get details about course
+     * **/
+    public CourseWithStudentsDto getCourseWithStudents(Long idCourse) {
+        Course course = courseRepository.findById(idCourse).orElseThrow(
+                () -> new EntityNotFoundException("Course with id: " + idCourse + " not found")
+        );
+        return courseMapper.toDtoWithStudents(course);
     }
 
 
