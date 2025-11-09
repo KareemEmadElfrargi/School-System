@@ -1,9 +1,8 @@
 package com.kareem.tone.controller;
-import com.kareem.tone.dto.CourseRequestDto;
 import com.kareem.tone.dto.StudentRequestDto;
 import com.kareem.tone.dto.StudentResponseDto;
 import com.kareem.tone.service.StudentService;
-import com.kareem.tone.util.StudentMapper;
+import com.kareem.tone.util.mapper.StudentMapper;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

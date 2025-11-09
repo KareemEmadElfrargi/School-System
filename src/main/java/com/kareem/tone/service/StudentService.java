@@ -6,7 +6,7 @@ import com.kareem.tone.model.Course;
 import com.kareem.tone.model.Student;
 import com.kareem.tone.repository.CourseRepository;
 import com.kareem.tone.repository.StudentRepository;
-import com.kareem.tone.util.StudentMapper;
+import com.kareem.tone.util.mapper.StudentMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;

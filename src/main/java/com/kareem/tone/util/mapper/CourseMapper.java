@@ -1,4 +1,4 @@
-package com.kareem.tone.util;
+package com.kareem.tone.util.mapper;
 
 import com.kareem.tone.dto.CourseRequestDto;
 import com.kareem.tone.dto.CourseResponseDto;

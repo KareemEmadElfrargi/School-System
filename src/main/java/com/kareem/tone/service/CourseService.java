@@ -6,11 +6,10 @@ import com.kareem.tone.dto.CourseResponseDto;
 import com.kareem.tone.dto.CourseWithStudentsDto;
 import com.kareem.tone.model.Course;
 import com.kareem.tone.repository.CourseRepository;
-import com.kareem.tone.util.CourseMapper;
+import com.kareem.tone.util.mapper.CourseMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

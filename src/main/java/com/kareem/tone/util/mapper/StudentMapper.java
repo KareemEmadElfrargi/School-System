@@ -1,6 +1,5 @@
-package com.kareem.tone.util;
+package com.kareem.tone.util.mapper;
 
-import com.kareem.tone.dto.StudentDTO;
 import com.kareem.tone.dto.StudentRequestDto;
 import com.kareem.tone.dto.StudentResponseDto;
 import com.kareem.tone.model.Course;
