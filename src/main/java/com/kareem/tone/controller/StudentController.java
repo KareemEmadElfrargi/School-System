@@ -65,4 +65,17 @@ public class StudentController {
                                                            @RequestBody List<Long> courseIds) {
         return ResponseEntity.ok(studentService.assignCourses(id, courseIds));
     }
+    @PostMapping("/{studentId}/courses/{courseId}")
+    public ResponseEntity<StudentResponseDto> enrollCourse(
+            @PathVariable Long studentId,
+            @PathVariable Long courseId) {
+        return ResponseEntity.ok(studentService.enrollCourse(studentId, courseId));
+    }
+    @DeleteMapping("/{studentId}/courses/{courseId}")
+    public ResponseEntity<StudentResponseDto> deleteCourse(
+            @PathVariable Long studentId,
+            @PathVariable Long courseId
+    ){
+        return ResponseEntity.ok(studentService.deleteCourse(studentId, courseId));
+    }
 }

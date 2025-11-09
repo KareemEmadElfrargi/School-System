@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -90,9 +91,33 @@ public class StudentService {
                 () -> new RuntimeException("Student with id: " + studentId + " not found")
         );
 
-        List<Course> courses = courseRepository.findAllById(courseIds);
+        Set<Course> courses = new HashSet<>(courseRepository.findAllById(courseIds));
 
-        student.getCourses().addAll(courses);
+//      student.getCourses().addAll(courses);
+        student.setCourses(courses);
+        studentRepository.save(student);
+        return studentMapper.toDTO(student);
+    }
+
+    public StudentResponseDto enrollCourse(Long studentId, Long courseId){
+        Student student = studentRepository.findById(studentId).orElseThrow(
+                () -> new RuntimeException("Student with id: " + studentId + " not found")
+        );
+        Course course = courseRepository.findById(courseId).orElseThrow(
+                () -> new RuntimeException("Course with id: " + courseId + " not found")
+        );
+        student.getCourses().add(course);
+        studentRepository.save(student);
+        return studentMapper.toDTO(student);
+    }
+    public StudentResponseDto deleteCourse(Long studentId, Long courseId){
+        Student student = studentRepository.findById(studentId).orElseThrow(
+                () -> new RuntimeException("Student with id: " + studentId + " not found")
+        );
+        Course course = courseRepository.findById(courseId).orElseThrow(
+                () -> new RuntimeException("Course with id: " + courseId + " not found")
+        );
+        student.getCourses().remove(course);
         studentRepository.save(student);
         return studentMapper.toDTO(student);
     }
